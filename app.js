@@ -100,7 +100,7 @@ document.getElementById('download-button').addEventListener('click', () => {
 // Guardar proyecto
 document.getElementById('save-button').addEventListener('click', () => {
     const projectData = {
-        htmlCode: codeMirror.getValue(),
+        htmlCode: localStorage.getItem('htmlCode') || '',
         cssCode: localStorage.getItem('cssCode') || '',
         jsCode: localStorage.getItem('jsCode') || ''
     };
@@ -138,29 +138,9 @@ document.getElementById('load-button').addEventListener('click', () => {
     input.click();
 });
 
-// Almacenar el código y actualizar vista previa
-codeMirror.on('change', (instance) => {
-    const code = instance.getValue();
-    switch (currentType) {
-        case 'html':
-            localStorage.setItem('htmlCode', code);
-            break;
-        case 'css':
-            localStorage.setItem('cssCode', code);
-            break;
-        case 'js':
-            localStorage.setItem('jsCode', code);
-            break;
-    }
-    updatePreview();
+// Inicializar CodeMirror al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+    initCodeMirror();
+    // Cargar el código desde localStorage al inicio
+    changeCodeType(currentType);
 });
-
-// Asignar el evento de clic a los botones
-document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => changeCodeType(tab.dataset.type));
-});
-
-// Inicializa el editor y vista previa
-initCodeMirror();
-changeCodeType(currentType);
-updatePreview();

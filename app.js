@@ -11,6 +11,23 @@ function initCodeMirror() {
         autoCloseBrackets: true,
         lineWrapping: true,
     });
+
+    // Evento que se dispara cuando el contenido del editor cambia
+    codeMirror.on('change', (instance) => {
+        const code = instance.getValue();
+        switch (currentType) {
+            case 'html':
+                localStorage.setItem('htmlCode', code);
+                break;
+            case 'css':
+                localStorage.setItem('cssCode', code);
+                break;
+            case 'js':
+                localStorage.setItem('jsCode', code);
+                break;
+        }
+        updatePreview(); // Actualiza la vista previa al cambiar el código
+    });
 }
 
 // Función para actualizar la vista previa en tiempo real

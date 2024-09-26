@@ -44,15 +44,15 @@ function changeCodeType(type) {
     switch (type) {
         case 'html':
             codeMirror.setValue(localStorage.getItem('htmlCode') || '');
-            codeMirror.setOption('mode', 'htmlmixed');
+            codeMirror.setOption('mode', 'htmlmixed'); // Modo para HTML
             break;
         case 'css':
             codeMirror.setValue(localStorage.getItem('cssCode') || '');
-            codeMirror.setOption('mode', 'css');
+            codeMirror.setOption('mode', 'css'); // Modo para CSS
             break;
         case 'js':
             codeMirror.setValue(localStorage.getItem('jsCode') || '');
-            codeMirror.setOption('mode', 'javascript');
+            codeMirror.setOption('mode', 'javascript'); // Modo para JavaScript
             break;
     }
 
@@ -136,6 +136,13 @@ document.getElementById('load-button').addEventListener('click', () => {
         }
     };
     input.click();
+});
+
+// Evento para cambiar el tipo de código al hacer clic en los botones
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        changeCodeType(tab.dataset.type);
+    });
 });
 
 // Inicializar CodeMirror al cargar la página

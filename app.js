@@ -1,5 +1,17 @@
-// Variables para manejar el tipo de código
 let currentType = 'html'; // Por defecto, HTML
+let codeMirror;
+
+// Inicializar CodeMirror
+function initCodeMirror() {
+    codeMirror = CodeMirror.fromTextArea(document.getElementById('code'), {
+        lineNumbers: true,
+        mode: 'htmlmixed', // Modo para HTML, CSS y JavaScript
+        theme: 'default',
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        lineWrapping: true,
+    });
+}
 
 // Función para actualizar la vista previa en tiempo real
 function updatePreview() {
@@ -24,24 +36,26 @@ function updatePreview() {
     doc.close();
 }
 
-// Función para cambiar el tipo de código
+// Cambiar el tipo de código
 function changeCodeType(type) {
     currentType = type;
-    const codeArea = document.getElementById('code');
-    
+
     // Cargar el código correspondiente
     switch (type) {
         case 'html':
-            codeArea.value = localStorage.getItem('htmlCode') || '';
+            codeMirror.setValue(localStorage.getItem('htmlCode') || '');
+            codeMirror.setOption('mode', 'htmlmixed');
             break;
         case 'css':
-            codeArea.value = localStorage.getItem('cssCode') || '';
+            codeMirror.setValue(localStorage.getItem('cssCode') || '');
+            codeMirror.setOption('mode', 'css');
             break;
         case 'js':
-            codeArea.value = localStorage.getItem('jsCode') || '';
+            codeMirror.setValue(localStorage.getItem('jsCode') || '');
+            codeMirror.setOption('mode', 'javascript');
             break;
     }
-    
+
     // Resaltar el botón activo
     const tabs = document.querySelectorAll('.tab');
     tabs.forEach(tab => {
@@ -83,17 +97,59 @@ document.getElementById('download-button').addEventListener('click', () => {
     });
 });
 
+// Guardar proyecto
+document.getElementById('save-button').addEventListener('click', () => {
+    const projectData = {
+        htmlCode: codeMirror.getValue(),
+        cssCode: localStorage.getItem('cssCode') || '',
+        jsCode: localStorage.getItem('jsCode') || ''
+    };
+    const blob = new Blob([JSON.stringify(projectData)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'project.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+});
+
+// Cargar proyecto
+document.getElementById('load-button').addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = e => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = event => {
+                const projectData = JSON.parse(event.target.result);
+                localStorage.setItem('htmlCode', projectData.htmlCode);
+                localStorage.setItem('cssCode', projectData.cssCode);
+                localStorage.setItem('jsCode', projectData.jsCode);
+                updatePreview();
+                changeCodeType(currentType); // Actualizar vista del editor
+            };
+            reader.readAsText(file);
+        }
+    };
+    input.click();
+});
+
 // Almacenar el código y actualizar vista previa
-document.getElementById('code').addEventListener('input', (event) => {
+codeMirror.on('change', (instance) => {
+    const code = instance.getValue();
     switch (currentType) {
         case 'html':
-            localStorage.setItem('htmlCode', event.target.value);
+            localStorage.setItem('htmlCode', code);
             break;
         case 'css':
-            localStorage.setItem('cssCode', event.target.value);
+            localStorage.setItem('cssCode', code);
             break;
         case 'js':
-            localStorage.setItem('jsCode', event.target.value);
+            localStorage.setItem('jsCode', code);
             break;
     }
     updatePreview();
@@ -105,5 +161,6 @@ document.querySelectorAll('.tab').forEach(tab => {
 });
 
 // Inicializa el editor y vista previa
+initCodeMirror();
 changeCodeType(currentType);
 updatePreview();

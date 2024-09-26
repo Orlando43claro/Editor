@@ -1,34 +1,5 @@
+// Variables para manejar el tipo de código
 let currentType = 'html'; // Por defecto, HTML
-let codeMirror;
-
-// Inicializar CodeMirror
-function initCodeMirror() {
-    codeMirror = CodeMirror.fromTextArea(document.getElementById('code'), {
-        lineNumbers: true,
-        mode: 'htmlmixed', // Modo para HTML, CSS y JavaScript
-        theme: 'default',
-        matchBrackets: true,
-        autoCloseBrackets: true,
-        lineWrapping: true,
-    });
-
-    // Evento que se dispara cuando el contenido del editor cambia
-    codeMirror.on('change', (instance) => {
-        const code = instance.getValue();
-        switch (currentType) {
-            case 'html':
-                localStorage.setItem('htmlCode', code);
-                break;
-            case 'css':
-                localStorage.setItem('cssCode', code);
-                break;
-            case 'js':
-                localStorage.setItem('jsCode', code);
-                break;
-        }
-        updatePreview(); // Actualiza la vista previa al cambiar el código
-    });
-}
 
 // Función para actualizar la vista previa en tiempo real
 function updatePreview() {
@@ -53,26 +24,24 @@ function updatePreview() {
     doc.close();
 }
 
-// Cambiar el tipo de código
+// Función para cambiar el tipo de código
 function changeCodeType(type) {
     currentType = type;
-
+    const codeArea = document.getElementById('code');
+    
     // Cargar el código correspondiente
     switch (type) {
         case 'html':
-            codeMirror.setValue(localStorage.getItem('htmlCode') || '');
-            codeMirror.setOption('mode', 'htmlmixed'); // Modo para HTML
+            codeArea.value = localStorage.getItem('htmlCode') || '';
             break;
         case 'css':
-            codeMirror.setValue(localStorage.getItem('cssCode') || '');
-            codeMirror.setOption('mode', 'css'); // Modo para CSS
+            codeArea.value = localStorage.getItem('cssCode') || '';
             break;
         case 'js':
-            codeMirror.setValue(localStorage.getItem('jsCode') || '');
-            codeMirror.setOption('mode', 'javascript'); // Modo para JavaScript
+            codeArea.value = localStorage.getItem('jsCode') || '';
             break;
     }
-
+    
     // Resaltar el botón activo
     const tabs = document.querySelectorAll('.tab');
     tabs.forEach(tab => {
@@ -114,57 +83,27 @@ document.getElementById('download-button').addEventListener('click', () => {
     });
 });
 
-// Guardar proyecto
-document.getElementById('save-button').addEventListener('click', () => {
-    const projectData = {
-        htmlCode: localStorage.getItem('htmlCode') || '',
-        cssCode: localStorage.getItem('cssCode') || '',
-        jsCode: localStorage.getItem('jsCode') || ''
-    };
-    const blob = new Blob([JSON.stringify(projectData)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'project.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+// Almacenar el código y actualizar vista previa
+document.getElementById('code').addEventListener('input', (event) => {
+    switch (currentType) {
+        case 'html':
+            localStorage.setItem('htmlCode', event.target.value);
+            break;
+        case 'css':
+            localStorage.setItem('cssCode', event.target.value);
+            break;
+        case 'js':
+            localStorage.setItem('jsCode', event.target.value);
+            break;
+    }
+    updatePreview();
 });
 
-// Cargar proyecto
-document.getElementById('load-button').addEventListener('click', () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
-    input.onchange = e => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = event => {
-                const projectData = JSON.parse(event.target.result);
-                localStorage.setItem('htmlCode', projectData.htmlCode);
-                localStorage.setItem('cssCode', projectData.cssCode);
-                localStorage.setItem('jsCode', projectData.jsCode);
-                updatePreview();
-                changeCodeType(currentType); // Actualizar vista del editor
-            };
-            reader.readAsText(file);
-        }
-    };
-    input.click();
-});
-
-// Evento para cambiar el tipo de código al hacer clic en los botones
+// Asignar el evento de clic a los botones
 document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-        changeCodeType(tab.dataset.type);
-    });
+    tab.addEventListener('click', () => changeCodeType(tab.dataset.type));
 });
 
-// Inicializar CodeMirror al cargar la página
-document.addEventListener('DOMContentLoaded', () => {
-    initCodeMirror();
-    // Cargar el código desde localStorage al inicio
-    changeCodeType(currentType);
-});
+// Inicializa el editor y vista previa
+changeCodeType(currentType);
+updatePreview();

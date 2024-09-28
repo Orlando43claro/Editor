@@ -1,67 +1,90 @@
-body {
-    font-family: Arial, sans-serif;
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.editor-container {
     display: flex;
     flex-direction: column;
+    width: 100%;
     height: 100vh;
+    padding: 20px;
 }
 
-header, nav, footer {
-    background-color: #f4f4f4;
-    padding: 10px;
-    text-align: center;
-}
-
-nav {
+.tabs {
     display: flex;
-    justify-content: center;
-    gap: 10px;
+    justify-content: space-around;
+    margin-bottom: 10px;
 }
 
-nav button {
-    background: none;
+.tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
     border: none;
     cursor: pointer;
-    font-size: 24px;
-}
-
-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-#editors {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-#editors .editor {
-    display: none;
-    flex: 1;
-}
-
-#editors .editor.active {
-    display: block;
-}
-
-#editors textarea {
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-    font-family: monospace;
+    flex-grow: 1;
+    text-align: center;
+    border-radius: 5px 5px 0 0;
     font-size: 16px;
 }
 
-#preview.hidden {
+.tab.active {
+    background-color: #007BFF;
+}
+
+.tab i {
+    font-size: 20px;
+}
+
+.editor {
+    width: 100%;
+    height: 70%;
     display: none;
 }
 
-#preview iframe {
+.editor.active {
+    display: block;
+}
+
+textarea {
     width: 100%;
-    height: 100vh;
+    height: 100%;
+    padding: 10px;
     border: none;
+    resize: none;
+    font-family: monospace;
+    font-size: 16px;
+    background-color: #fafafa;
+}
+
+button#preview-btn {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+iframe#preview-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.hidden {
+    display: none;
 }

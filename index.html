@@ -155,7 +155,7 @@
                 const htmlCode = document.getElementById('html-code').value;
                 const cssCode = `<style>${document.getElementById('css-code').value}</style>`;
                 const jsCode = `<script>${document.getElementById('js-code').value}<\/script>`;
-                const previewContent = htmlCode + cssCode + jsCode;
+                const previewContent = `${htmlCode} ${cssCode} ${jsCode}`;
                 
                 previewFrame.srcdoc = previewContent;
                 previewFrame.classList.remove('hidden');

@@ -164,7 +164,9 @@
                 previewFrame.srcdoc = previewContent;
                 
                 // Ocultar los editores y mostrar la vista previa
-                document.querySelectorAll('.editor').forEach(e => e.classList.add('hidden'));
+                htmlEditor.classList.add('hidden');
+                cssEditor.classList.add('hidden');
+                jsEditor.classList.add('hidden');
                 previewFrame.style.display = 'block';
             });
         });

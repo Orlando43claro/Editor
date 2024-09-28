@@ -3,49 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editor HTML, CSS, JS</title>
+    <title>Editor HTML, CSS y JS</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <header>
-        <h1>Mi Editor</h1>
-        <button id="run">Ejecutar</button>
-        <select id="theme">
-            <option value="light">Claro</option>
-            <option value="dark">Oscuro</option>
-        </select>
-    </header>
-    <nav>
-        <button class="tab" data-target="html-editor">
-            <i class="fab fa-html5"></i>
-        </button>
-        <button class="tab" data-target="css-editor">
-            <i class="fab fa-css3-alt"></i>
-        </button>
-        <button class="tab" data-target="js-editor">
-            <i class="fab fa-js"></i>
-        </button>
-    </nav>
-    <main>
-        <section id="editors">
-            <div id="html-editor" class="editor active">
-                <textarea></textarea>
-            </div>
-            <div id="css-editor" class="editor">
-                <textarea></textarea>
-            </div>
-            <div id="js-editor" class="editor">
-                <textarea></textarea>
-            </div>
-        </section>
-        <section id="preview" class="hidden">
-            <iframe></iframe>
-        </section>
-    </main>
-    <footer>
-        <div id="console"></div>
-    </footer>
+    <div class="editor-container">
+        <div class="tabs">
+            <button id="html-tab" class="tab active">
+                <i class="fab fa-html5"></i> HTML
+            </button>
+            <button id="css-tab" class="tab">
+                <i class="fab fa-css3-alt"></i> CSS
+            </button>
+            <button id="js-tab" class="tab">
+                <i class="fab fa-js-square"></i> JavaScript
+            </button>
+        </div>
+
+        <div class="editor" id="html-editor">
+            <textarea id="html-code" placeholder="Escribe tu código HTML aquí"></textarea>
+        </div>
+        <div class="editor hidden" id="css-editor">
+            <textarea id="css-code" placeholder="Escribe tu código CSS aquí"></textarea>
+        </div>
+        <div class="editor hidden" id="js-editor">
+            <textarea id="js-code" placeholder="Escribe tu código JavaScript aquí"></textarea>
+        </div>
+
+        <button id="preview-btn">Vista Previa</button>
+    </div>
+
+    <iframe id="preview-frame" class="hidden"></iframe>
+
     <script src="script.js"></script>
 </body>
 </html>

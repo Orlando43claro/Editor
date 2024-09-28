@@ -96,6 +96,10 @@
         .hidden {
             display: none;
         }
+
+        .full-height {
+            height: calc(100vh - 40px); /* Ajusta el tamaño del iframe al de la pantalla */
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -163,11 +167,12 @@
                 
                 previewFrame.srcdoc = previewContent;
                 
-                // Ocultar los editores y mostrar la vista previa
+                // Ocultar los editores y expandir el iframe
                 htmlEditor.classList.add('hidden');
                 cssEditor.classList.add('hidden');
                 jsEditor.classList.add('hidden');
                 previewFrame.style.display = 'block';
+                previewFrame.classList.add('full-height'); // Expandir iframe a pantalla completa
             });
         });
     </script>
